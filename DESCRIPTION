@@ -1,0 +1,18 @@
+Package: Lab5
+Type: Package
+Title: API
+Version: 1.0
+Date: 2022-09-23
+Author: Yi Hung Chen, Kyriakos Papadopoulos
+Maintainer: Yi Hung Chen<yihch883@student.liu.se> ,Kyriakos Papadopoulos<kyrpa853@student.liu.se>
+Description: API
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.2.1
+Depends: R (>= 3.5.0), ggplot2, methods, shiny
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
