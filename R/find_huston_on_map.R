@@ -26,7 +26,7 @@ server <- function(input, output) {
     if(input$left < -99.50555 |input$right > -91.94627 | input$top > 37.33690| input$bottom < 27.50711){stop("Not in Data")}
     else{
     us <- c(left = input$left, bottom = input$bottom , right = input$right, top = input$top)
-    get_stamenmap(us, zoom = 5, maptype = "toner-lite") %>% ggmap()
+    get_stamenmap(us, zoom = 10, maptype = "toner-lite") %>% ggmap()
     
     }
   })
