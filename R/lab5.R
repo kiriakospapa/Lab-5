@@ -1,7 +1,14 @@
+textInputRow<-function (inputId, label, value = "", ...) 
+{
+  div(style="display:inline-block",
+      tags$label(label, `for` = inputId), 
+      tags$input(id = inputId, type = "text", value = value,class="input-small", ...))
+}
+
 
 #=========== CREATE A NEW TABLE FOR WIND DATA ===========
 
-updated_wind <- wind %>% rowwise() %>% # Create 2 new columns with the coordinates of the second point of the winds
+updated_wind <- wind %>% rowwise() %>% 
   mutate(lon2 = lon + delta_lon) %>%
   mutate(lat2 = lat + delta_lat)
 
@@ -11,10 +18,32 @@ updated_wind <- updated_wind %>%
     29.6 <= lat & lat <= 29.8
   )
 
-#=========== CREATE A NEW TABLE FOR WIND DATA ===========
+#============= CREATE THE MAP OF HUSTON ==================
 
 huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
 map <-get_stamenmap(huston, maptype = "terrain", zoom=10)
-plot <- ggmap(map) + geom_segment(data = updated_wind, aes(x=lon, y=lat, xend=lon2, yend=lat2, color=spd), alpha=0.8, size=2) 
-plot
+plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x=lon, y=lat, xend=lon2, yend=lat2, color=spd), alpha=0.8, size=2) 
+ 
 
+#=================== DESING THE UI =======================
+
+ui <- fluidPage(
+  
+  selectInput( "option", label = "Select what you want to see",
+              choices = list("Winds in Huston", "Crimes in huston"),
+              selected = NULL, width = "20%"),
+  textInputRow(inputId="min_wind", label="Minimum of wind", value = NULL, class="input-small"),
+  textInputRow(inputId="max_wind", label="Maximum of wind", value = NULL),
+  plotOutput(outputId="probs")
+)
+
+#================= CREATING BACKEND ======================
+server <- function(input, output) {
+  result <- ""
+  observe({  result <- input$option
+            print(result)
+})
+   output$probs <- renderPlot(plot1)
+}
+
+shinyApp(ui, server)
