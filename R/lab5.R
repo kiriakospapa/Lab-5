@@ -40,7 +40,6 @@ ui <- fluidPage(
               selected = NULL, width = "20%"),
   textInputRow(inputId="min_wind", label="Minimum of wind", value = 0, class="input-small"),
   textInputRow(inputId="max_wind", label="Maximum of wind", value = 100),
-  actionButton("do", "Click me"),
   plotOutput(outputId="probs")
 )
 
@@ -55,7 +54,9 @@ server <- function(input, output) {
               # Change plot depending on the option selected
               { 
                 if (input$option == "Winds in Huston"){
-                    if(is.na(as.integer(input$min_wind)) | is.na(input$max_wind)){
+                   if(input$min_wind == ""| input$max_wind == ""){
+                        stop("Insert a value")
+                   } else if (is.na(as.integer(input$min_wind)) | is.na(input$max_wind)){
                       stop("Insert integer not charachters")
                     }else{
                     wind_plot(as.integer(input$min_wind), as.integer(input$max_wind))
