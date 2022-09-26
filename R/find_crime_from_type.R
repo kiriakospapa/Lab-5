@@ -1,11 +1,10 @@
-#'  find crime
+#'  find crime from type
 #' 
-#'  find crime 
+#'  find crime from type
 #' @import ggplot2
 #' @import ggmap
 #' @import shiny
 #' @export 
-
 
 
 #####Function outside in order to test#####

@@ -1,6 +1,10 @@
-library(shiny)
-library(ggmap)
-
+#'  find crime from time
+#' 
+#'  find crime from time
+#' @import ggplot2
+#' @import ggmap
+#' @import shiny
+#' @export 
 
 
 #####Function outside in order to test#####
