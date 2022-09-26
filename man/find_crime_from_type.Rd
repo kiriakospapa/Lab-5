@@ -2,10 +2,15 @@
 % Please edit documentation in R/find_crime_from_type.R
 \name{find_crime_from_type}
 \alias{find_crime_from_type}
-\title{find crime}
+\title{find crime from type}
 \usage{
 find_crime_from_type(data, type)
 }
+\arguments{
+\item{data}{get crime data}
+
+\item{type}{crime type input}
+}
 \description{
-find crime
+find crime from type
 }

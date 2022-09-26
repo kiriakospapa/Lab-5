@@ -1,6 +1,9 @@
 #'  find crime from both time and type
 #' 
 #'  find crime from both time and type
+#' @param data get crime data
+#' @param type crime type input
+#' @param x month input
 #' @import ggplot2
 #' @import ggmap
 #' @import shiny
@@ -48,6 +51,7 @@ find_crime_from_time_and_type <- function(data,type,x){
 
 ##### End of Function #####
 
+crime <- ggmap::crime
 
 ##### Shiny #####
 

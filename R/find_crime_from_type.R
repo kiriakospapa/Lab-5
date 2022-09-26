@@ -1,6 +1,9 @@
 #'  find crime from type
 #' 
 #'  find crime from type
+#'  
+#' @param data get crime data
+#' @param type crime type input
 #' @import ggplot2
 #' @import ggmap
 #' @import shiny
@@ -32,7 +35,8 @@
 
   ##### End of Function #####
 
-
+  crime <- ggmap::crime
+  
   ##### Shiny #####
   ui <- shiny::fluidPage(
   

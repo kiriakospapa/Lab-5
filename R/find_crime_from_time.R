@@ -1,6 +1,9 @@
 #'  find crime from time
 #' 
 #'  find crime from time
+#'  
+#' @param data get crime data
+#' @param x month input
 #' @import ggplot2
 #' @import ggmap
 #' @import shiny
@@ -34,6 +37,7 @@
 
   ##### End of Function #####
   
+  crime <<- ggmap::crime
   
   ##### Shiny #####
   
