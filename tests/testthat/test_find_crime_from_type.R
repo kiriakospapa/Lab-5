@@ -1,7 +1,7 @@
 data("crime")
-test_that("lenreg rejects errounous input", {
+test_that("find_crime_from_type rejects errounous input", {
 
-  expect_error(find_crime_from_type(crime, "thft"))
+  expect_error(find_crime_from_type(crime, "shoplifting"))
 })
 
 
