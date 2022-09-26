@@ -9,7 +9,7 @@ Description: API
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.2.1
-Depends: R (>= 3.5.0), ggplot2, methods, shiny
+Depends: R (>= 3.5.0), ggplot2,  shiny, ggmap
 Suggests: 
     knitr,
     rmarkdown,

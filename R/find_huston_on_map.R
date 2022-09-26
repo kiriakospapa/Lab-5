@@ -1,5 +1,5 @@
 library(shiny)
-library("ggmap")
+library(ggmap)
 
 ui <- fluidPage(
   
@@ -19,10 +19,10 @@ ui <- fluidPage(
   
 )
 
-server <- function(input, output) {
+server1 <- function(input, output) {
   
   output$map_in_data <- renderPlot({
-    
+      
     if(input$left < -99.50555 |input$right > -91.94627 | input$top > 37.33690| input$bottom < 27.50711){stop("Not in Data")}
     else{
     us <- c(left = input$left, bottom = input$bottom , right = input$right, top = input$top)
@@ -33,4 +33,4 @@ server <- function(input, output) {
   
 }
 
-shinyApp(ui, server)
+shinyApp(ui, server1)
