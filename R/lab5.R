@@ -11,6 +11,7 @@
 #' @import ggmap
 #' @import dplyr
 #' @importFrom  shiny fluidPage
+# @import  shinyjs
 #' @export textInputRow
 
 textInputRow<-function (inputId, label, value = "", ...) 
@@ -44,7 +45,7 @@ find_crime_from_type <- function(data,type){
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <- ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map<- ggmap::ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.005, color = "red")
+  crime_map<- ggmap::ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x= lon, y= lat),size = 0.005, color = "red")
   
   return(crime_map)
 }
@@ -75,7 +76,7 @@ find_crime_from_month<-function(data,x){
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <-ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map <-ggmap(map) + ggplot2::geom_jitter(data = data_of_the_month, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.0005, color = "red")
+  crime_map <-ggmap(map) + ggplot2::geom_jitter(data = data_of_the_month, ggplot2::aes(x= lon, y= lat),size = 0.0005, color = "red")
   
   return(crime_map)
 }
@@ -116,12 +117,12 @@ find_crime_from_time_and_type <- function(data,type,x){
   
   data <- ggmap::crime
   
-  index_of_type <- which(data_of_the_month$offense == type)
+  index_of_type <- which( data$offense == type)
   data_of_type <- data_of_the_month[index_of_type,]
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <- ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map <- ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.005, color = "red")
+  crime_map <- ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x= lon, y= lat),size = 0.005, color = "red")
   
   return(crime_map)
 }
@@ -153,13 +154,13 @@ wind_plot <- function(min, max){
   else{
   updated_wind <- updated_wind %>%
     filter(
-      -95.4 <= ggmap::wind$lon & ggmap::wind$lon <= -95,
-      29.6 <= ggmap::wind$lat & ggmap::wind$lat <= 29.8,
-      min <= ggmap::wind$spd & ggmap::wind$spd <= max
+      -95.4 <= lon &  lon <= -95,
+      29.6 <=  lat & lat <= 29.8,
+      min <=  spd &  spd <= max
     )
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <-get_stamenmap(huston, maptype = "terrain", zoom=10)
-  plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x=ggmap::wind$lon, y=ggmap::wind$lat, xend=ggmap::wind$lon2, yend=ggmap::wind$lat2, color=ggmap::wind$spd), alpha=0.8, size=2) 
+  plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x= lon, y= lat, xend= lon2, yend= lat2, color= spd), alpha=0.8, size=2) 
   plot(plot1)
   
   }
@@ -181,7 +182,7 @@ wind_plot <- function(min, max){
 #   textInputRow(inputId="max_wind", label="Maximum of wind", value = 100),
 #   plotOutput(outputId="probs")
 # )
-#
+# 
 # #================= CREATING BACKEND ======================
 # 
 # server <- function(input, output, session) {
@@ -231,7 +232,7 @@ wind_plot <- function(min, max){
 #                   if(as.double(input$min_wind) %% 1 == 0)
 #                   {
 # 
-#                     plot(find_crime_from_time_and_type(crime, input$max_wind, as.integer(input$min_wind)))
+#                     plot(find_crime_from_time_and_type(ggmap::crime, input$max_wind, as.integer(input$min_wind)))
 #                   }
 #                   else{
 # 
@@ -248,7 +249,7 @@ wind_plot <- function(min, max){
 #                   if(as.double(input$min_wind) %% 1 == 0)
 #                   {
 # 
-#                     find_crime_from_month(crime, as.integer(input$min_wind))
+#                     find_crime_from_month(ggmap::crime, as.integer(input$min_wind))
 #                   }
 #                   else{
 # 
@@ -264,7 +265,7 @@ wind_plot <- function(min, max){
 #                                      label = "Type of crime")
 #                   updateActionButton(session, "min_wind",
 #                                      label = "")
-#                   find_crime_from_type(crime,input$max_wind)
+#                   find_crime_from_type(ggmap::crime,input$max_wind)
 # 
 #                 }
 # 
