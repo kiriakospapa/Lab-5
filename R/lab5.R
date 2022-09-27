@@ -119,6 +119,15 @@ updated_wind <- wind %>% rowwise() %>%
 #== FUNCTION FOR CREATING THE MAP RAGARDING THE INPUTS===
 
 wind_plot <- function(min, max){
+  
+  if(min > max){
+    stop("Min is bigger than Max")
+  }
+  
+  else if((min %% 1 != 0) | ((max %% 1) != 0)){
+    stop("Should be integer")
+  }
+  else{
   updated_wind <- updated_wind %>%
     filter(
       -95.4 <= lon & lon <= -95,
@@ -130,7 +139,7 @@ wind_plot <- function(min, max){
   plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x=lon, y=lat, xend=lon2, yend=lat2, color=spd), alpha=0.8, size=2) 
   plot(plot1)
   
-  
+  }
 }
 
 
