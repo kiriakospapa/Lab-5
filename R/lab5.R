@@ -12,7 +12,12 @@
 #' @import dplyr
 #' @importFrom  shiny fluidPage
 #' @import shinyjs
-#' @export 
+#' @export textInputRow
+#' @export find_crime_from_type
+#' @export find_crime_from_month
+#' @export find_crime_from_time_and_type
+#' @export wind_plot
+
 
 
 
