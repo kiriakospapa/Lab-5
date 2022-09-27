@@ -2,21 +2,18 @@
 #' 
 #'  find crime from type
 #'  
-#' @param textInputRow textInputRow
 #' @param inputId inputId
 #' @param label label
 #' @param value value
 #' @param ... other input
+#'
 #' @import ggplot2
 #' @import ggmap
 #' @import dplyr
 #' @importFrom  shiny fluidPage
 #' @import shinyjs
 #' @export textInputRow
-#' @export find_crime_from_type
-#' @export find_crime_from_month
-#' @export find_crime_from_time_and_type
-#' @export wind_plot
+
 
 
 
@@ -31,6 +28,12 @@ textInputRow<-function (inputId, label, value = "", ...)
 
 #================= FRIND CRIME FROM TYPE =================
 
+#' find_crime_from_type
+#'
+#' @param data crim_data
+#' @param type crime_type
+#' @return crime_map
+#' @export
 find_crime_from_type <- function(data,type){
   
   if(type != "theft" & 
@@ -53,6 +56,12 @@ find_crime_from_type <- function(data,type){
 
 #================= FIND CRIME FROM MONTH =================
 
+#' find_crime_from_month
+#'
+#' @param data crime_data
+#' @param x month input
+#' @return crime_map
+#' @export
 find_crime_from_month<-function(data,x){
   
   if(x == 1){month <- "january"}
@@ -79,6 +88,13 @@ find_crime_from_month<-function(data,x){
 
 #============ FIND CRIME FROM TIME AND TYPE =============
 
+#' find_crime_from_time_and_type
+#'
+#' @param data crime_data
+#' @param x month input
+#' @param type crime_type
+#' @return crime_map
+#' @export
 find_crime_from_time_and_type <- function(data,type,x){
   
   ###Check type input###
@@ -123,6 +139,13 @@ updated_wind <- wind %>% rowwise() %>%
 
 #== FUNCTION FOR CREATING THE MAP RAGARDING THE INPUTS===
 
+#' wind_plot
+#'
+#' @param min min 
+#' @param max max
+#'
+#' @return plot1
+#' @export
 wind_plot <- function(min, max){
   
   if(min > max){

@@ -14,8 +14,6 @@ textInputRow(inputId, label, value = "", ...)
 \item{value}{value}
 
 \item{...}{other input}
-
-\item{textInputRow}{textInputRow}
 }
 \description{
 find crime from type
