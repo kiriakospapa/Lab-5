@@ -11,18 +11,13 @@
 #' @import ggmap
 #' @import dplyr
 #' @importFrom  shiny fluidPage
-#' @import shinyjs
 #' @export textInputRow
-
-
-
-
 
 textInputRow<-function (inputId, label, value = "", ...) 
 {
-  div(style="display:inline-block",
-      tags$label(label, `for` = inputId), 
-      tags$input(id = inputId, type = "text", value = value,class="input-small", ...))
+  shiny::div(style="display:inline-block",
+      shiny::tags$label(label, `for` = inputId), 
+      shiny::tags$input(id = inputId, type = "text", value = value,class="input-small", ...))
 }
 
 
@@ -49,7 +44,7 @@ find_crime_from_type <- function(data,type){
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <- ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map<- ggmap::ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=lon, y=lat),size = 0.005, color = "red")
+  crime_map<- ggmap::ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.005, color = "red")
   
   return(crime_map)
 }
@@ -80,7 +75,7 @@ find_crime_from_month<-function(data,x){
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <-ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map <-ggmap(map) + ggplot2::geom_jitter(data = data_of_the_month, ggplot2::aes(x=lon, y=lat),size = 0.0005, color = "red")
+  crime_map <-ggmap(map) + ggplot2::geom_jitter(data = data_of_the_month, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.0005, color = "red")
   
   return(crime_map)
 }
@@ -119,21 +114,21 @@ find_crime_from_time_and_type <- function(data,type,x){
   index_of_month <- which(data$month == month)
   data_of_the_month <- data[index_of_month,]
   
-  data <- crime
+  data <- ggmap::crime
   
   index_of_type <- which(data_of_the_month$offense == type)
   data_of_type <- data_of_the_month[index_of_type,]
   
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <- ggmap::get_stamenmap(huston, maptype = "terrain", zoom=10)
-  crime_map <- ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=lon, y=lat),size = 0.005, color = "red")
+  crime_map <- ggmap(map) + ggplot2::geom_jitter(data = data_of_type, ggplot2::aes(x=ggmap::crime$lon, y=ggmap::crime$lat),size = 0.005, color = "red")
   
   return(crime_map)
 }
 
 #=========== CREATE A NEW TABLE FOR WIND DATA ===========
 
-updated_wind <- wind %>% rowwise() %>% 
+updated_wind <- ggmap::wind %>% rowwise() %>% 
   mutate(lon2 = lon + delta_lon) %>%
   mutate(lat2 = lat + delta_lat)
 
@@ -158,124 +153,124 @@ wind_plot <- function(min, max){
   else{
   updated_wind <- updated_wind %>%
     filter(
-      -95.4 <= lon & lon <= -95,
-      29.6 <= lat & lat <= 29.8,
-      min <= spd & spd <= max
+      -95.4 <= ggmap::wind$lon & ggmap::wind$lon <= -95,
+      29.6 <= ggmap::wind$lat & ggmap::wind$lat <= 29.8,
+      min <= ggmap::wind$spd & ggmap::wind$spd <= max
     )
   huston <- c(left= -95.4, bottom = 29.6, right = -95, top = 29.8)
   map <-get_stamenmap(huston, maptype = "terrain", zoom=10)
-  plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x=lon, y=lat, xend=lon2, yend=lat2, color=spd), alpha=0.8, size=2) 
+  plot1 <- ggmap(map) + geom_segment(data = updated_wind, aes(x=ggmap::wind$lon, y=ggmap::wind$lat, xend=ggmap::wind$lon2, yend=ggmap::wind$lat2, color=ggmap::wind$spd), alpha=0.8, size=2) 
   plot(plot1)
   
   }
 }
 
 
-#=================== DESING THE UI =======================
-
-ui <- fluidPage(
-
-  useShinyjs(),
-  selectInput( "option", label = "Select what you want to see",
-
-               choices = list("Winds in Huston", "Crimes in huston by month and type", "Crimes in huston by month", "Crimes in huston by type"),
-               selected = NULL, width = "20%"),
-
-
-  textInputRow(inputId="min_wind", label="Minimum of wind", value = 0, class="input-small"),
-  textInputRow(inputId="max_wind", label="Maximum of wind", value = 100),
-  plotOutput(outputId="probs")
-)
-
-#================= CREATING BACKEND ======================
-
-server <- function(input, output, session) {
-  result <- ""
-  observe({  result <- input$option
-
-            print(result)
-            output$probs <- renderPlot(
-
-              # Change plot depending on the option selected
-              {
-                if (input$option == "Winds in Huston"){
-                  show("max_wind")
-                  updateActionButton(session, "min_wind",
-                                     label = "Minumum of wind")
-                  updateActionButton(session, "max_wind",
-                                     label = "Maximum of wind")
-
-                  # updateNumericInput(session, "min_wind", value = "0")
-                  # updateNumericInput(session, "max_wind", value = "100")
-
-                   if(input$min_wind == ""| input$max_wind == ""){
-
-                     stop("Insert a value")
-                   }
-                  else if (is.na(as.integer(input$min_wind)) | is.na(as.integer(input$max_wind))){
-
-                    stop("Insert integer not charachters")
-                    }
-                  else{
-
-                    wind_plot(as.integer(input$min_wind), as.integer(input$max_wind))
-                    }
-                }
-                else if(input$option == "Crimes in huston by month and type"){
-
-                  show("max_wind")
-                  show("min_wind")
-
-
-
-                  updateActionButton(session, "min_wind",label = "Month")
-
-                  updateActionButton(session, "max_wind",
-                                     label = "Type of crime")
-
-                  if(as.double(input$min_wind) %% 1 == 0)
-                  {
-
-                    plot(find_crime_from_time_and_type(crime, input$max_wind, as.integer(input$min_wind)))
-                  }
-                  else{
-
-                    stop("Month should be an integer from 1 to 8" )
-                  }
-                }
-                else if(input$option == "Crimes in huston by month"){
-
-                  hide("max_wind")
-                  updateActionButton(session, "max_wind",
-                                     label = "")
-                  updateActionButton(session, "min_wind",
-                                     label = "Month")
-                  if(as.double(input$min_wind) %% 1 == 0)
-                  {
-
-                    find_crime_from_month(crime, as.integer(input$min_wind))
-                  }
-                  else{
-
-                    stop("Month should be an integer from 1 to 8" )
-                  }
-                }
-                else if(input$option == "Crimes in huston by type"){
-                  shinyjs::hide("min_wind")
-                  shinyjs::show("max_wind")
-
-
-                  updateActionButton(session, "max_wind",
-                                     label = "Type of crime")
-                  updateActionButton(session, "min_wind",
-                                     label = "")
-                  find_crime_from_type(crime,input$max_wind)
-
-                }
-
-            })
-   })
-
-}
-
-shinyApp(ui, server)
+# #=================== DESING THE UI =======================
+# 
+# ui <- fluidPage(
+# 
+#   useShinyjs(),
+#   selectInput( "option", label = "Select what you want to see",
+# 
+#                choices = list("Winds in Huston", "Crimes in huston by month and type", "Crimes in huston by month", "Crimes in huston by type"),
+#                selected = NULL, width = "20%"),
+# 
+# 
+#   textInputRow(inputId="min_wind", label="Minimum of wind", value = 0, class="input-small"),
+#   textInputRow(inputId="max_wind", label="Maximum of wind", value = 100),
+#   plotOutput(outputId="probs")
+# )
+#
+# #================= CREATING BACKEND ======================
+# 
+# server <- function(input, output, session) {
+#   result <- ""
+#   observe({  result <- input$option
+# 
+#             print(result)
+#             output$probs <- renderPlot(
+# 
+#               # Change plot depending on the option selected
+#               {
+#                 if (input$option == "Winds in Huston"){
+#                   show("max_wind")
+#                   updateActionButton(session, "min_wind",
+#                                      label = "Minumum of wind")
+#                   updateActionButton(session, "max_wind",
+#                                      label = "Maximum of wind")
+# 
+#                   # updateNumericInput(session, "min_wind", value = "0")
+#                   # updateNumericInput(session, "max_wind", value = "100")
+# 
+#                    if(input$min_wind == ""| input$max_wind == ""){
+# 
+#                      stop("Insert a value")
+#                    }
+#                   else if (is.na(as.integer(input$min_wind)) | is.na(as.integer(input$max_wind))){
+# 
+#                     stop("Insert integer not charachters")
+#                     }
+#                   else{
+# 
+#                     wind_plot(as.integer(input$min_wind), as.integer(input$max_wind))
+#                     }
+#                 }
+#                 else if(input$option == "Crimes in huston by month and type"){
+# 
+#                   show("max_wind")
+#                   show("min_wind")
+# 
+# 
+# 
+#                   updateActionButton(session, "min_wind",label = "Month")
+# 
+#                   updateActionButton(session, "max_wind",
+#                                      label = "Type of crime")
+# 
+#                   if(as.double(input$min_wind) %% 1 == 0)
+#                   {
+# 
+#                     plot(find_crime_from_time_and_type(crime, input$max_wind, as.integer(input$min_wind)))
+#                   }
+#                   else{
+# 
+#                     stop("Month should be an integer from 1 to 8" )
+#                   }
+#                 }
+#                 else if(input$option == "Crimes in huston by month"){
+# 
+#                   hide("max_wind")
+#                   updateActionButton(session, "max_wind",
+#                                      label = "")
+#                   updateActionButton(session, "min_wind",
+#                                      label = "Month")
+#                   if(as.double(input$min_wind) %% 1 == 0)
+#                   {
+# 
+#                     find_crime_from_month(crime, as.integer(input$min_wind))
+#                   }
+#                   else{
+# 
+#                     stop("Month should be an integer from 1 to 8" )
+#                   }
+#                 }
+#                 else if(input$option == "Crimes in huston by type"){
+#                   shinyjs::hide("min_wind")
+#                   shinyjs::show("max_wind")
+# 
+# 
+#                   updateActionButton(session, "max_wind",
+#                                      label = "Type of crime")
+#                   updateActionButton(session, "min_wind",
+#                                      label = "")
+#                   find_crime_from_type(crime,input$max_wind)
+# 
+#                 }
+# 
+#             })
+#    })
+# 
+# }
+# 
+# shinyApp(ui, server)
