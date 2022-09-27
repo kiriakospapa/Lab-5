@@ -1,3 +1,20 @@
+#'  find crime from type
+#' 
+#'  find crime from type
+#'  
+#' @param textInputRow textInputRow
+#' @param inputId inputId
+#' @param label label
+#' @param value value
+#' @param ... other input
+#' @import ggplot2
+#' @import ggmap
+#' @import dplyr
+#' @import shiny
+#' @export 
+
+
+
 textInputRow<-function (inputId, label, value = "", ...) 
 {
   div(style="display:inline-block",
