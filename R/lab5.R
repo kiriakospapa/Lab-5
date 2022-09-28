@@ -1,6 +1,6 @@
-#'  find crime from type
+#'  The Lab5 API package
 #' 
-#'  find crime from type
+#'  Using OpenStreetMaps via Stamen Tiles combine with crime and wind data from ggmap.
 #'  
 #' @param inputId inputId
 #' @param label label
@@ -9,7 +9,7 @@
 #'
 #' @import ggplot2
 #' @import ggmap
-#' @import dplyr
+#' @import dplyr 
 #' @importFrom  shiny fluidPage
 # @import  shinyjs
 #' @export textInputRow

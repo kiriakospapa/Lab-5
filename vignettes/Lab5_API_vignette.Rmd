@@ -1,0 +1,23 @@
+---
+title: "Lab5_API_vignette"
+author: "Yi Hung Chen, Kyriakos Papadopoulos"
+date: "28/09/2022"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab5_API_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(Lab5)
+```
+
+```
