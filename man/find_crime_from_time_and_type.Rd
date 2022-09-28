@@ -4,14 +4,14 @@
 \alias{find_crime_from_time_and_type}
 \title{find_crime_from_time_and_type}
 \usage{
-find_crime_from_time_and_type(data, type, x)
+find_crime_from_time_and_type(data, type, time)
 }
 \arguments{
 \item{data}{crime_data}
 
 \item{type}{crime_type}
 
-\item{x}{month input}
+\item{time}{month input}
 }
 \value{
 crime_map
