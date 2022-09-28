@@ -2,7 +2,7 @@
 % Please edit documentation in R/lab5.R
 \name{textInputRow}
 \alias{textInputRow}
-\title{find crime from type}
+\title{The Lab5 API package}
 \usage{
 textInputRow(inputId, label, value = "", ...)
 }
@@ -16,5 +16,5 @@ textInputRow(inputId, label, value = "", ...)
 \item{...}{other input}
 }
 \description{
-find crime from type
+Using OpenStreetMaps via Stamen Tiles combine with crime and wind data from ggmap.
 }

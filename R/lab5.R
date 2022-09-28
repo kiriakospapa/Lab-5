@@ -13,7 +13,6 @@
 #' @importFrom  shiny fluidPage
 # @import  shinyjs
 #' @export textInputRow
-
 textInputRow<-function (inputId, label, value = "", ...) 
 {
   shiny::div(style="display:inline-block",
@@ -31,6 +30,9 @@ textInputRow<-function (inputId, label, value = "", ...)
 #' @return crime_map
 #' @export
 find_crime_from_type <- function(data,type){
+  
+  lon<-NULL
+  lat<-NULL
   
   if(type != "theft" & 
      type != "auto theft" & 
@@ -59,6 +61,8 @@ find_crime_from_type <- function(data,type){
 #' @return crime_map
 #' @export
 find_crime_from_month<-function(data,x){
+  lon<-NULL
+  lat<-NULL
   
   if(x == 1){month <- "january"}
   else if(x == 2){month <- "february"}
@@ -92,6 +96,9 @@ find_crime_from_month<-function(data,x){
 #' @return crime_map
 #' @export
 find_crime_from_time_and_type <- function(data,type,x){
+  
+  lon<-NULL
+  lat<-NULL
   
   ###Check type input###
   if(type != "theft" & 
@@ -143,7 +150,7 @@ updated_wind <- ggmap::wind %>% rowwise() %>%
 #' @return plot1
 #' @export
 wind_plot <- function(min, max){
-  
+  lat<-lat2<-lon<-lon2<-spd<-NULL
   if(min > max){
     stop("Min is bigger than Max")
   }
